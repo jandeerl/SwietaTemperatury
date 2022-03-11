@@ -2,11 +2,13 @@ from ctypes import alignment
 from datetime import date
 import tkinter
 from tkinter import INSERT, ttk
-from matplotlib.pyplot import text
+from pandas import DataFrame
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from pyparsing import col
 from sqlalchemy import column, literal
-import Services
+import wykres
 
 frm = tkinter.Tk()
 
@@ -16,7 +18,7 @@ frm.geometry("800x600")
 title = tkinter.Label(frm, text="Pogoda na święta", font=("Times New Roman",20))
 title.grid()
 
-lata = [2022-i for i in range(11)]
+lata = [2022-i for i in range(6)]
 swieta = ["Nowy Rok", "Wielkanoc", "Święto Pracy", "Boże Ciało"]
 
 pierwszaData = tkinter.IntVar(frm)
@@ -51,11 +53,12 @@ txt2.grid(row=2, column=0,sticky="w")
 datePicker2 = tkinter.OptionMenu(datePickerFrame, drugaData, *lata)
 datePicker2.grid(row=2)
 
-""" od = tkinter.IntVar(frm)
-od.set(int(pierwszaData.get()))
-do = tkinter.IntVar(frm)
-do.set(int(drugaData.get())) """
-btn = tkinter.Button(datePickerFrame,text="Print", command=lambda: Services.Service.get_data(pierwszaData.get(), drugaData.get(), swietaVar.get()))
+fwykres = tkinter.Frame(frm,highlightbackground="black")
+fwykres.grid()
+
+
+
+btn = tkinter.Button(datePickerFrame,text="Print", command= lambda: wykres.Wykres.WstawWykres(fwykres,pierwszaData.get(),drugaData.get(),swietaVar.get()))
 btn.grid(row=3, column=0)
 
 

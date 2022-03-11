@@ -1,4 +1,4 @@
-from matplotlib.cbook import index_of
+import matplotlib
 import requests
 import datetime
 
@@ -11,9 +11,10 @@ class Service():
         temps = []
         avTemp = 0
         avTemps = []
+        dct = {}
         linkHolidays = "https://date.nager.at/api/v3/publicholidays/%s/PL"
         linkWeather = "https://www.metaweather.com/api/location/523920/%d/%d/%d"
-
+        
         for x in range(dateFrom, dateTo+1):
             request = requests.get(linkHolidays % x).json()
             results.append(request)
@@ -33,13 +34,13 @@ class Service():
                 temps.append(y['the_temp'])
             for i in temps:
                 avTemp += i
-            avTemp //= len(temps)
+            if(len(temps) != 0):
+                avTemp //= len(temps)
             avTemps.append(avTemp)
             temps.clear()
             avTemp = 0
         
         for x in range(len(dates)):
-            print(str(dates[x]) + " = " + str(avTemps[x]))
-    
+            dct[dates[x]] = int(avTemps[x])
+        return dct
 
-Service.get_data(2017, 2021, "Wielkanoc")
